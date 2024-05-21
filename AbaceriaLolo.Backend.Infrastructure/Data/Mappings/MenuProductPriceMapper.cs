@@ -12,14 +12,14 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
 
             builder.HasKey(mpp => mpp.MenuProductPriceId);
 
+            builder.Property(mpp => mpp.Price)
+                .HasColumnName("Price");
+
             builder.Property(mpp => mpp.MenuProductId)
                 .HasColumnName("MenuProductId");
 
             builder.Property(mpp => mpp.TypeOfServingId)
                 .HasColumnName("TypeOfServingId");
-
-            builder.Property(mpp => mpp.Price)
-                .HasColumnName("Price");
 
             // This is the relationship between MenuProductPriceModel and MenuProductModel
             builder.HasOne(mpp => mpp.MenuProduct)

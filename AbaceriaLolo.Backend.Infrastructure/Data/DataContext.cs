@@ -45,8 +45,9 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data
         public DbSet<MenuProductModel> MenuProduct { get; set; }
         public DbSet<MenuSectionModel> MenuSection { get; set; }
         public DbSet<TypeOfServingModel> TypeOfServing { get; set; }
-        public DbSet<AllergenMenuProductModel> AllergenProduct { get; set; }
+        public DbSet<AllergenMenuProductModel> AllergenMenuProduct { get; set; }
         public DbSet<MenuProductPriceModel> MenuProductPrice { get; set; }
+
 
 
     }

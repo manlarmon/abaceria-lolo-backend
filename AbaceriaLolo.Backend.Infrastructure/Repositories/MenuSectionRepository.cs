@@ -16,12 +16,16 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuSectionModel>> GetAllMenuSectionsAsync()
         {
-            return await _context.MenuSection.ToListAsync();
+            return await _context.MenuSection
+                .Include(ms => ms.MenuProducts)
+                .ToListAsync();
         }
 
         public async Task<MenuSectionModel> GetMenuSectionByIdAsync(int id)
         {
-            return await _context.MenuSection.FirstOrDefaultAsync(ms => ms.MenuSectionId == id);
+            return await _context.MenuSection
+                .Include(ms => ms.MenuProducts)
+                .FirstOrDefaultAsync(ms => ms.MenuSectionId == id);
         }
 
         public async Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection)

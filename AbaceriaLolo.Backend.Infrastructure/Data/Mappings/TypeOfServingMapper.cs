@@ -19,6 +19,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
                 .HasColumnName("TypeOfServingName")
                 .IsRequired();
 
+            //Relationship between TypeOfServing and MenuProductPrice
             builder.HasMany(ts => ts.MenuProductPrice)
                 .WithOne(mpp => mpp.TypeOfServing)
                 .HasForeignKey(mpp => mpp.TypeOfServingId);

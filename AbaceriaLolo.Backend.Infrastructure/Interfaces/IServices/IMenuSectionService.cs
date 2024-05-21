@@ -1,4 +1,5 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
 {
@@ -6,7 +7,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
     {
         Task<IEnumerable<MenuSectionModel>> GetAllMenuSectionsAsync();
         Task<MenuSectionModel> GetMenuSectionByIdAsync(int id);
-        Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection);
+        Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionDTO menuSection);
         Task UpdateMenuSectionAsync(MenuSectionModel menuSection);
         Task DeleteMenuSectionAsync(int id);
     }

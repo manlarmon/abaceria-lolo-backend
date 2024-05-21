@@ -51,17 +51,16 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
         [HttpPut]
         public async Task<IActionResult> UpdateMenuProductAsync(MenuProductModel menuProduct)
         {
-            var menuProductToUpdate = await _menuProductService.GetMenuProductByIdAsync(menuProduct.MenuProductId);
-
-            if (menuProductToUpdate == null)
-            {
-                return NotFound();
-            }
-            else if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var menuProductToUpdate = await _menuProductService.GetMenuProductByIdAsync(menuProduct.MenuProductId);
+            if (menuProductToUpdate == null)
+            {
+                return NotFound();
+            }
             await _menuProductService.UpdateMenuProductAsync(menuProduct);
             return Ok(await _menuProductService.GetMenuProductByIdAsync(menuProduct.MenuProductId));
         }

@@ -1,4 +1,5 @@
 ﻿using AbaceriaLolo.Backend.Business.Services;
+using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +36,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMenuSection([FromBody] MenuSectionModel menuSection)
+        public async Task<IActionResult> CreateMenuSection([FromBody] MenuSectionDTO menuSection)
         {
             if (!ModelState.IsValid)
             {

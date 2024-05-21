@@ -6,21 +6,31 @@ using AbaceriaLolo.Backend.Infrastructure.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Text.Json.Serialization;
 
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllers();
 
+// Add services to the container.
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", policy =>
     {
-        policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials();
+        policy.AllowAnyOrigin() // Permitir cualquier origen
+              .AllowAnyMethod()
+              .AllowAnyHeader();
     });
 });
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+    });
 
 // SCOPES
 // Los scopes son una forma de limitar la duración de un objeto que se crea en el contenedor de dependencias. 
@@ -33,6 +43,11 @@ builder.Services.AddScoped<IAllergenRepository, AllergenRepository>();
 builder.Services.AddScoped<IAllergenService, AllergenService>();
 builder.Services.AddScoped<IMenuProductRepository, MenuProductRepository>();
 builder.Services.AddScoped<IMenuProductService, MenuProductService>();
+builder.Services.AddScoped<ITypeOfServingRepository, TypeOfServingRepository>();
+builder.Services.AddScoped<ITypeOfServingService, TypeOfServingService>();
+builder.Services.AddScoped<IMenuProductPriceRepository, MenuProductPriceRepository>();
+builder.Services.AddScoped<IMenuProductPriceService, MenuProductPriceService>();
+
 
 // Add DbContext
 // Se agrega el contexto de la base de datos a la aplicación.
@@ -74,7 +89,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
+app.UseCors("CorsPolicy"); // Usar la política CORS definida
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();

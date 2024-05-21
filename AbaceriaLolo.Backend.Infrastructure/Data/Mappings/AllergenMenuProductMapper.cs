@@ -16,7 +16,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
                 .HasColumnName("AllergenId");
 
             builder.Property(ap => ap.MenuProductId)
-                .HasColumnName("ProductId");
+                .HasColumnName("MenuProductId");
 
             // This is the relationship between AllergenProductModel and AllergenModel
             builder.HasOne(ap => ap.Allergen)

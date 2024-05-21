@@ -1,4 +1,5 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
@@ -24,9 +25,16 @@ namespace AbaceriaLolo.Backend.Business.Services
             return await _menuSectionRepository.GetMenuSectionByIdAsync(id);
         }
 
-        public async Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection)
+        public async Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionDTO menuSection)
         {
-            return await _menuSectionRepository.CreateMenuSectionAsync(menuSection);
+            var menuSectionModel = new MenuSectionModel
+            {
+                MenuSectionId = 0,
+                MenuSectionName = menuSection.MenuSectionName,
+                Order = menuSection.Order
+            };
+
+            return await _menuSectionRepository.CreateMenuSectionAsync(menuSectionModel);
              
         }
 
