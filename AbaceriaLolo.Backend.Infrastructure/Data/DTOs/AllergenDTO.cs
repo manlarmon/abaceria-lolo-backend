@@ -4,13 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AbaceriaLolo.Backend.Infrastructure.Data.Models
+namespace AbaceriaLolo.Backend.Infrastructure.Data.DTOs
 {
-    public class AllergenModel
+    public class AllergenDTO
     {
-        public int AllergenId { get; set; }
         public required string Abbreviation { get; set; }
         public required string AllergenName { get; set; }
-        public ICollection<AllergenMenuProductModel>? AllergenMenuProduct { get; set; }
     }
 }

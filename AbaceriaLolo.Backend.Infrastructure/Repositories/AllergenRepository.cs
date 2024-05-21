@@ -24,16 +24,26 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
             return await _context.Allergen.FirstOrDefaultAsync(ms => ms.AllergenId == id);
         }
 
-        public async Task CreateAllergenAsync(AllergenModel allergen)
+        public async Task<AllergenModel> CreateAllergenAsync(AllergenModel allergen)
         {
             _context.Allergen.Add(allergen);
             await _context.SaveChangesAsync();
+            return allergen;
         }
 
-        public async Task UpdateAllergenAsync(AllergenModel allergen, int id)
+        public async Task UpdateAllergenAsync(AllergenModel allergen)
         {
-            _context.Entry(allergen).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            var existingEntity = await _context.Allergen.FindAsync(allergen.AllergenId);
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(allergen);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                // Opcional: Manejar el caso en que la entidad no existe
+                throw new Exception("Allergen not found");
+            }
         }
 
         public async Task DeleteAllergenAsync(int id)

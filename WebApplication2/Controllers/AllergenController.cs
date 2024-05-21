@@ -1,4 +1,5 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,7 +24,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetAllergenByIdAsync(int id)
+        public async Task<IActionResult> GetAllergenById(int id)
         {
             var allergen = await _allergenService.GetAllergenByIdAsync(id);
             if (allergen == null)
@@ -34,7 +35,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAllergen([FromBody] AllergenModel allergen)
+        public async Task<IActionResult> CreateAllergen([FromBody] AllergenDTO allergen)
         {
             if (!ModelState.IsValid)
             {
@@ -44,29 +45,39 @@ namespace AbaceriaLolo.WebAPI.Controllers
             await _allergenService.CreateAllergenAsync(allergen);
 
             // Devuelve una respuesta HTTP 201 (Created) con la ubicación del recurso recién creado en el encabezado de la respuesta, y el objeto allergen como el cuerpo de la respuesta.
-            return CreatedAtAction(nameof(GetAllergenByIdAsync), new { id = allergen.AllergenId }, allergen);
+            var allergens = await _allergenService.GetAllAllergensAsync();
+            var lastAllergen = allergens.Last();
+            return Ok(lastAllergen);
         }
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAllergenAsync(AllergenModel allergen, int id)
+        [HttpPut]
+        public async Task<IActionResult> UpdateAllergenAsync(AllergenModel allergen)
         {
-            var allergenToUpdate = await _allergenService.GetAllergenByIdAsync(id);
+            var allergenToUpdate = await _allergenService.GetAllergenByIdAsync(allergen.AllergenId);
+
             if (allergenToUpdate == null)
             {
                 return NotFound();
             }
-            return Ok(_allergenService.UpdateAllergenAsync(allergen, id));
+            else if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            await _allergenService.UpdateAllergenAsync(allergen);
+            return Ok(await _allergenService.GetAllergenByIdAsync(allergen.AllergenId));
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAllergenAsync(int id)
+        public async Task<IActionResult> DeleteAllergen(int id)
         {
             var allergenToDelete = await _allergenService.GetAllergenByIdAsync(id);
             if (allergenToDelete == null)
             {
                 return NotFound();
             }
-            return Ok(_allergenService.DeleteAllergenAsync(id));
+            await _allergenService.DeleteAllergenAsync(id);
+            return Ok(allergenToDelete);
         }
     }
 }

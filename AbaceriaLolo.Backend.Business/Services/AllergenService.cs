@@ -1,4 +1,5 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
@@ -24,14 +25,21 @@ namespace AbaceriaLolo.Backend.Business.Services
             return await _allergenRepository.GetAllergenByIdAsync(id);
         }
 
-        public async Task CreateAllergenAsync(AllergenModel allergen)
+        public async Task<AllergenModel> CreateAllergenAsync(AllergenDTO allergen)
         {
-            await _allergenRepository.CreateAllergenAsync(allergen);
+            var alergenModel = new AllergenModel
+            {
+                AllergenId = 0,
+                Abbreviation = allergen.Abbreviation,
+                AllergenName = allergen.AllergenName
+            };
+
+            return await _allergenRepository.CreateAllergenAsync(alergenModel);
         }
 
-        public async Task UpdateAllergenAsync(AllergenModel allergen, int id)
+        public async Task UpdateAllergenAsync(AllergenModel allergen)
         {
-            await _allergenRepository.UpdateAllergenAsync(allergen, id);
+            await _allergenRepository.UpdateAllergenAsync(allergen);
         }
 
         public async Task DeleteAllergenAsync(int id)

@@ -13,6 +13,11 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
             builder.Property(a => a.AllergenId)
                 .HasColumnName("AllergenId");
 
+            builder.Property(a => a.Abbreviation)
+                .IsRequired()
+                .HasMaxLength(10)
+                .HasColumnName("Abbreviation");
+
             builder.Property(a => a.AllergenName)
                 .IsRequired()
                 .HasMaxLength(100)

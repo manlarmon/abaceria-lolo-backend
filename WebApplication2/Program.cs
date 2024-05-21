@@ -14,26 +14,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllers();
 
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("CorsPolicy", policy =>
-//    {
-//        policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials();
-//    });
-//});
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowSpecificOrigin",
-        builder => builder.WithOrigins("http://localhost:4200")
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .AllowAnyHeader());
-    //options.AddPolicy("AllowSpecificDeployOrigin",
-    //    builder => builder.WithOrigins("https://gameseat-front-aef0d4a36136.herokuapp.com")
-    //        .AllowAnyMethod()
-    //        .AllowCredentials()
-    //        .AllowAnyHeader());
+    options.AddPolicy("CorsPolicy", policy =>
+    {
+        policy.AllowAnyMethod().AllowAnyHeader().SetIsOriginAllowed(origin => true).AllowCredentials();
+    });
 });
 
 // SCOPES
@@ -45,6 +31,8 @@ builder.Services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
 builder.Services.AddScoped<IMenuSectionService, MenuSectionService>();
 builder.Services.AddScoped<IAllergenRepository, AllergenRepository>();
 builder.Services.AddScoped<IAllergenService, AllergenService>();
+builder.Services.AddScoped<IMenuProductRepository, MenuProductRepository>();
+builder.Services.AddScoped<IMenuProductService, MenuProductService>();
 
 // Add DbContext
 // Se agrega el contexto de la base de datos a la aplicación.

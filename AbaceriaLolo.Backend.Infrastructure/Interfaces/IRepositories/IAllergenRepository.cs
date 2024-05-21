@@ -6,8 +6,8 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
     {
         Task<IEnumerable<AllergenModel>> GetAllAllergensAsync();
         Task<AllergenModel> GetAllergenByIdAsync(int id);
-        Task CreateAllergenAsync(AllergenModel allergen);
-        Task UpdateAllergenAsync(AllergenModel allergen, int id);
+        Task<AllergenModel> CreateAllergenAsync(AllergenModel allergen);
+        Task UpdateAllergenAsync(AllergenModel allergen);
         Task DeleteAllergenAsync(int id);
 
     }

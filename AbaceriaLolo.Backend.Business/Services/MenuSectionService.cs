@@ -24,14 +24,15 @@ namespace AbaceriaLolo.Backend.Business.Services
             return await _menuSectionRepository.GetMenuSectionByIdAsync(id);
         }
 
-        public async Task CreateMenuSectionAsync(MenuSectionModel menuSection)
+        public async Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection)
         {
-            await _menuSectionRepository.CreateMenuSectionAsync(menuSection);
+            return await _menuSectionRepository.CreateMenuSectionAsync(menuSection);
+             
         }
 
-        public async Task UpdateMenuSectionAsync(MenuSectionModel menuSection, int id)
+        public async Task UpdateMenuSectionAsync(MenuSectionModel menuSection)
         {
-            await _menuSectionRepository.UpdateMenuSectionAsync(menuSection, id);
+            await _menuSectionRepository.UpdateMenuSectionAsync(menuSection);
         }
 
         public async Task DeleteMenuSectionAsync(int id)

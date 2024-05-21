@@ -6,8 +6,8 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
     {
         Task<IEnumerable<MenuSectionModel>> GetAllMenuSectionsAsync();
         Task<MenuSectionModel> GetMenuSectionByIdAsync(int id);
-        Task CreateMenuSectionAsync(MenuSectionModel menuSection);
-        Task UpdateMenuSectionAsync(MenuSectionModel menuSection, int id);
+        Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection);
+        Task UpdateMenuSectionAsync(MenuSectionModel menuSection);
         Task DeleteMenuSectionAsync(int id);
     }
 }

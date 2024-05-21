@@ -24,16 +24,26 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
             return await _context.MenuSection.FirstOrDefaultAsync(ms => ms.MenuSectionId == id);
         }
 
-        public async Task CreateMenuSectionAsync(MenuSectionModel menuSection)
+        public async Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionModel menuSection)
         {
             await _context.MenuSection.AddAsync(menuSection);
             await _context.SaveChangesAsync();
+            return menuSection;
         }
 
-        public async Task UpdateMenuSectionAsync(MenuSectionModel menuSection, int id)
+        public async Task UpdateMenuSectionAsync(MenuSectionModel menuSection)
         {
-            _context.MenuSection.Update(menuSection);
-            await _context.SaveChangesAsync();
+            var existingEntity = await _context.MenuSection.FindAsync(menuSection.MenuSectionId);
+            if (existingEntity != null)
+            {
+                _context.Entry(existingEntity).CurrentValues.SetValues(menuSection);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                // Opcional: Manejar el caso en que la entidad no existe
+                throw new Exception("MenuSection not found");
+            }
         }
 
         public async Task DeleteMenuSectionAsync(int id)

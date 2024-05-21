@@ -9,7 +9,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
     {
         public void Configure(EntityTypeBuilder<MenuProductModel> builder)
         {
-            builder.ToTable("MenuProducts");
+            builder.ToTable("MenuProduct");
 
             builder.HasKey(mp => mp.MenuProductId);
 
@@ -19,7 +19,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
 
             builder.Property(mp => mp.Order)
                 .IsRequired()
-                .HasColumnName("MenuProductOrder");
+                .HasColumnName("Order");
 
             builder.Property(mp => mp.MenuSectionId)
                 .IsRequired()
