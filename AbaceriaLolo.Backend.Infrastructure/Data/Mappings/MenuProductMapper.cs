@@ -17,6 +17,10 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings
                 .IsRequired()
                 .HasColumnName("MenuProductName");
 
+            builder.Property(mp => mp.IsVisible)
+                .IsRequired()
+                .HasColumnName("isVisible");
+
             builder.Property(mp => mp.Order)
                 .IsRequired()
                 .HasColumnName("Order");

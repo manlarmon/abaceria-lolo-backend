@@ -10,6 +10,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.DTOs
     public class MenuProductDTO
     {
         public required string MenuProductName { get; set; }
+        public bool IsVisible { get; set; }
         public int MenuSectionId { get; set; }
         public int Order { get; set; }
 

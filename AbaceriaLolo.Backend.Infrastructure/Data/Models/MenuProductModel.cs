@@ -10,7 +10,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Models
     public class MenuProductModel
     {
         public int MenuProductId { get; set; }
-        //public bool IsVisible { get; set; }
+        public bool IsVisible { get; set; }
         public required string MenuProductName { get; set; }
         public int Order { get; set; }
         public int MenuSectionId { get; set; }
