@@ -17,12 +17,17 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", policy =>
-    {
-        policy.AllowAnyOrigin() // Permitir cualquier origen
-              .AllowAnyMethod()
-              .AllowAnyHeader();
-    });
+    //options.AddPolicy("AllowSpecificOrigin",
+    //    builder => builder.WithOrigins("http://localhost:4200")
+    //        .AllowAnyMethod()
+    //        .AllowCredentials()
+    //        .AllowAnyHeader());
+
+    options.AddPolicy("AllowSpecificDeployOrigin",
+        builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .AllowAnyHeader());
 });
 
 builder.Services.AddControllers()
