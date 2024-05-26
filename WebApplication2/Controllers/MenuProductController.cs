@@ -1,9 +1,9 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 
-namespace AbaceriaLolo.Backend.WebApi.Controllers
+namespace AbaceriaLolo.WebAPI.Controllers
 {
     [ApiController]
     [Route("MenuProduct")]
@@ -42,28 +42,29 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
                 return BadRequest(ModelState);
             }
 
-
-            // Devuelve una respuesta HTTP 201 (Created) con la ubicación del recurso recién creado en el encabezado de la respuesta, y el objeto menuProduct como el cuerpo de la respuesta.
-            var createdProduct = await _menuProductService.CreateMenuProductAsync(menuProduct);
-            return CreatedAtAction(nameof(GetMenuProductById), new { id = createdProduct.MenuProductId }, createdProduct);
+            await _menuProductService.CreateMenuProductAsync(menuProduct);
+            return Ok(menuProduct);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateMenuProductAsync(MenuProductModel menuProduct)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMenuProduct(int id, [FromBody] MenuProductDTO menuProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var menuProductToUpdate = await _menuProductService.GetMenuProductByIdAsync(menuProduct.MenuProductId);
+            var menuProductToUpdate = await _menuProductService.GetMenuProductByIdAsync(id);
             if (menuProductToUpdate == null)
             {
                 return NotFound();
             }
+
+            menuProduct.MenuProductId = id;
             await _menuProductService.UpdateMenuProductAsync(menuProduct);
-            return Ok(await _menuProductService.GetMenuProductByIdAsync(menuProduct.MenuProductId));
+            return NoContent();
         }
+
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMenuProduct(int id)
@@ -73,8 +74,9 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
             {
                 return NotFound();
             }
+
             await _menuProductService.DeleteMenuProductAsync(id);
-            return Ok(menuProductToDelete);
+            return NoContent();
         }
     }
 }

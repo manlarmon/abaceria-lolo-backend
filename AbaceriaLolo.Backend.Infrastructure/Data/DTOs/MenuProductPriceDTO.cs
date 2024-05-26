@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Data.DTOs
 {
-    public class TypeOfServingDTO
+    public class MenuProductPriceDTO
     {
+        public int MenuProductPriceId { get; set; }
+        public int MenuProductId { get; set; }
         public int TypeOfServingId { get; set; }
-        public string? TypeOfServingName { get; set; }
+        public TypeOfServingDTO? TypeOfServing { get; set; }
+        public decimal Price { get; set; }
     }
 
 }

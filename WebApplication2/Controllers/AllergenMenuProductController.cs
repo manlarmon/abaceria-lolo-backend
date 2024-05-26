@@ -1,10 +1,10 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AbaceriaLolo.Backend.WebAPI.Controllers
+namespace AbaceriaLolo.WebAPI.Controllers
 {
     [ApiController]
     [Route("AllergenMenuProduct")]
@@ -36,7 +36,7 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAllergenMenuProduct([FromBody] AllergenMenuProductModel allergenMenuProduct)
+        public async Task<IActionResult> CreateAllergenMenuProduct([FromBody] AllergenMenuProductDTO allergenMenuProduct)
         {
             if (!ModelState.IsValid)
             {
@@ -48,15 +48,15 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAllergenMenuProduct(int id, [FromBody] AllergenMenuProductModel allergenMenuProduct)
+        public async Task<IActionResult> UpdateAllergenMenuProduct(int id, [FromBody] AllergenMenuProductDTO allergenMenuProduct)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var allergenMenuProductToUpdate = await _allergenMenuProductService.GetAllergenMenuProductByIdAsync(id);
-            if (allergenMenuProductToUpdate == null)
+            var existingAllergenMenuProduct = await _allergenMenuProductService.GetAllergenMenuProductByIdAsync(id);
+            if (existingAllergenMenuProduct == null)
             {
                 return NotFound();
             }
@@ -70,8 +70,8 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAllergenMenuProduct(int id)
         {
-            var allergenMenuProductToDelete = await _allergenMenuProductService.GetAllergenMenuProductByIdAsync(id);
-            if (allergenMenuProductToDelete == null)
+            var existingAllergenMenuProduct = await _allergenMenuProductService.GetAllergenMenuProductByIdAsync(id);
+            if (existingAllergenMenuProduct == null)
             {
                 return NotFound();
             }

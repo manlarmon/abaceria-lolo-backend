@@ -1,5 +1,6 @@
 using AbaceriaLolo.Backend.Business.Services;
 using AbaceriaLolo.Backend.Infrastructure.Data;
+using AbaceriaLolo.Backend.Business.Mapping;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using AbaceriaLolo.Backend.Infrastructure.Repositories;
@@ -8,26 +9,36 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 
-
+ 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 // Add services to the container.
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("AllowSpecificOrigin",
+//        builder => builder.WithOrigins("http://localhost:4200")
+//            .AllowAnyMethod()
+//            .AllowCredentials()
+//            .AllowAnyHeader());
+
+//    //options.AddPolicy("AllowSpecificDeployOrigin",
+//    //    builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
+//    //        .AllowAnyMethod()
+//    //        .AllowCredentials()
+//    //        .AllowAnyHeader());
+//});
+
 builder.Services.AddCors(options =>
 {
-    //options.AddPolicy("AllowSpecificOrigin",
-    //    builder => builder.WithOrigins("http://localhost:4200")
-    //        .AllowAnyMethod()
-    //        .AllowCredentials()
-    //        .AllowAnyHeader());
-
-    options.AddPolicy("AllowSpecificDeployOrigin",
-        builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
-            .AllowAnyMethod()
-            .AllowCredentials()
-            .AllowAnyHeader());
+    options.AddPolicy("CorsPolicy", builder =>
+    {
+        builder.AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader();
+    });
 });
 
 builder.Services.AddControllers()
@@ -37,22 +48,28 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
+
 // SCOPES
 // Los scopes son una forma de limitar la duración de un objeto que se crea en el contenedor de dependencias. 
 // Cuando se crea un objeto en un scope, solo está disponible en ese scope y en los scopes secundarios.
 // AddScoped: Crea un nuevo objeto para cada solicitud HTTP.
 
-builder.Services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
-builder.Services.AddScoped<IMenuSectionService, MenuSectionService>();
-builder.Services.AddScoped<IAllergenRepository, AllergenRepository>();
-builder.Services.AddScoped<IAllergenService, AllergenService>();
-builder.Services.AddScoped<IMenuProductRepository, MenuProductRepository>();
-builder.Services.AddScoped<IMenuProductService, MenuProductService>();
-builder.Services.AddScoped<ITypeOfServingRepository, TypeOfServingRepository>();
-builder.Services.AddScoped<ITypeOfServingService, TypeOfServingService>();
-builder.Services.AddScoped<IMenuProductPriceRepository, MenuProductPriceRepository>();
-builder.Services.AddScoped<IMenuProductPriceService, MenuProductPriceService>();
 
+// Repositories
+builder.Services.AddScoped<IAllergenRepository, AllergenRepository>();
+builder.Services.AddScoped<IMenuProductRepository, MenuProductRepository>();
+builder.Services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
+builder.Services.AddScoped<ITypeOfServingRepository, TypeOfServingRepository>();
+builder.Services.AddScoped<IAllergenMenuProductRepository, AllergenMenuProductRepository>();
+builder.Services.AddScoped<IMenuProductPriceRepository, MenuProductPriceRepository>();
+
+// Services
+builder.Services.AddScoped<IAllergenService, AllergenService>();
+builder.Services.AddScoped<IMenuProductService, MenuProductService>();
+builder.Services.AddScoped<IMenuSectionService, MenuSectionService>();
+builder.Services.AddScoped<ITypeOfServingService, TypeOfServingService>();
+builder.Services.AddScoped<IAllergenMenuProductService, AllergenMenuProductService>();
+builder.Services.AddScoped<IMenuProductPriceService, MenuProductPriceService>();
 
 // Add DbContext
 // Se agrega el contexto de la base de datos a la aplicación.
@@ -71,6 +88,12 @@ builder.Services.AddSwaggerGen(options =>
         Description = "AbaceriaLolo API"
     });
 });
+
+
+// Register AutoMapper
+builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
+
+
 
 var app = builder.Build();
 

@@ -10,11 +10,10 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Models
     public class MenuSectionModel
     {
         public int MenuSectionId { get; set; }
+        public string MenuSectionName { get; set; }
         public bool IsVisible { get; set; }
         public int Order { get; set; }
-        public required string MenuSectionName { get; set; }
-
         public ICollection<MenuProductModel>? MenuProducts { get; set; }
-
     }
+
 }

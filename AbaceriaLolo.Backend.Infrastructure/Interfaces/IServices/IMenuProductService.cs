@@ -1,14 +1,15 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
 {
     public interface IMenuProductService
     {
-        Task<IEnumerable<MenuProductModel>> GetAllMenuProductsAsync();
-        Task<MenuProductModel> GetMenuProductByIdAsync(int id);
-        Task<MenuProductModel> CreateMenuProductAsync(MenuProductDTO menuProduct);
-        Task UpdateMenuProductAsync(MenuProductModel menuProduct);
+        Task<IEnumerable<MenuProductDTO>> GetAllMenuProductsAsync();
+        Task<MenuProductDTO> GetMenuProductByIdAsync(int id);
+        Task<MenuProductDTO> CreateMenuProductAsync(MenuProductDTO menuProduct);
+        Task UpdateMenuProductAsync(MenuProductDTO menuProduct);
         Task DeleteMenuProductAsync(int id);
     }
 }

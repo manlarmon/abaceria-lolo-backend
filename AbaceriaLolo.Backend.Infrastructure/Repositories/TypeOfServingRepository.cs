@@ -5,52 +5,50 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AbaceriaLolo.Backend.Infrastructure.Repositories
+public class TypeOfServingRepository : ITypeOfServingRepository
 {
-    public class TypeOfServingRepository : ITypeOfServingRepository
+    private readonly DataContext _context;
+
+    public TypeOfServingRepository(DataContext context)
     {
-        private readonly DataContext _context;
+        _context = context;
+    }
 
-        public TypeOfServingRepository(DataContext context)
-        {
-            _context = context;
-        }
+    public async Task<IEnumerable<TypeOfServingModel>> GetAllTypesOfServingAsync()
+    {
+        return await _context.TypeOfServing.ToListAsync();
+    }
 
-        public async Task<IEnumerable<TypeOfServingModel>> GetAllTypesOfServingAsync()
-        {
-            return await _context.TypeOfServing.ToListAsync();
-        }
+    public async Task<TypeOfServingModel> GetTypeOfServingByIdAsync(int id)
+    {
+        return await _context.TypeOfServing.FindAsync(id);
+    }
 
-        public async Task<TypeOfServingModel> GetTypeOfServingByIdAsync(int id)
-        {
-            return await _context.TypeOfServing.FindAsync(id);
-        }
+    public async Task<TypeOfServingModel> CreateTypeOfServingAsync(TypeOfServingModel typeOfServing)
+    {
+        _context.TypeOfServing.Add(typeOfServing);
+        await _context.SaveChangesAsync();
+        return typeOfServing;
+    }
 
-        public async Task<TypeOfServingModel> CreateTypeOfServingAsync(TypeOfServingModel typeOfServing)
+    public async Task<TypeOfServingModel> UpdateTypeOfServingAsync(TypeOfServingModel typeOfServing)
+    {
+        var existingType = await _context.TypeOfServing.FindAsync(typeOfServing.TypeOfServingId);
+        if (existingType != null)
         {
-            await _context.TypeOfServing.AddAsync(typeOfServing);
+            _context.Entry(existingType).CurrentValues.SetValues(typeOfServing);
             await _context.SaveChangesAsync();
-            return typeOfServing;
         }
+        return typeOfServing;
+    }
 
-        public async Task UpdateTypeOfServingAsync(TypeOfServingModel typeOfServing)
+    public async Task DeleteTypeOfServingAsync(int id)
+    {
+        var typeOfServing = await _context.TypeOfServing.FindAsync(id);
+        if (typeOfServing != null)
         {
-            var existingEntity = await _context.TypeOfServing.FindAsync(typeOfServing.TypeOfServingId);
-            if (existingEntity != null)
-            {
-                _context.Entry(existingEntity).CurrentValues.SetValues(typeOfServing);
-                await _context.SaveChangesAsync();
-            }
-        }
-
-        public async Task DeleteTypeOfServingAsync(int id)
-        {
-            var typeOfServing = await GetTypeOfServingByIdAsync(id);
-            if (typeOfServing != null)
-            {
-                _context.TypeOfServing.Remove(typeOfServing);
-                await _context.SaveChangesAsync();
-            }
+            _context.TypeOfServing.Remove(typeOfServing);
+            await _context.SaveChangesAsync();
         }
     }
 }

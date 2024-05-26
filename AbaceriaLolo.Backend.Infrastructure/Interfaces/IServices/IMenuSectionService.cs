@@ -1,14 +1,15 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
 {
     public interface IMenuSectionService
     {
-        Task<IEnumerable<MenuSectionModel>> GetAllMenuSectionsAsync();
-        Task<MenuSectionModel> GetMenuSectionByIdAsync(int id);
-        Task<MenuSectionModel> CreateMenuSectionAsync(MenuSectionDTO menuSection);
-        Task UpdateMenuSectionAsync(MenuSectionModel menuSection);
+        Task<IEnumerable<MenuSectionDTO>> GetAllMenuSectionsAsync();
+        Task<MenuSectionDTO> GetMenuSectionByIdAsync(int id);
+        Task<MenuSectionDTO> CreateMenuSectionAsync(MenuSectionDTO menuSection);
+        Task UpdateMenuSectionAsync(MenuSectionDTO menuSection);
         Task DeleteMenuSectionAsync(int id);
     }
 }

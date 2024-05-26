@@ -1,8 +1,7 @@
-﻿using AbaceriaLolo.Backend.Business.Services;
-using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
-using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
+using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 
 namespace AbaceriaLolo.WebAPI.Controllers
 {
@@ -18,7 +17,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllMenuSection()
+        public async Task<IActionResult> GetAllMenuSections()
         {
             var menuSections = await _menuSectionService.GetAllMenuSectionsAsync();
             return Ok(menuSections);
@@ -47,22 +46,23 @@ namespace AbaceriaLolo.WebAPI.Controllers
             return Ok(menuSection);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateMenuSection(MenuSectionModel menuSection)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateMenuSection(int id, [FromBody] MenuSectionDTO menuSection)
         {
-            var menuSectionToUpdate = await _menuSectionService.GetMenuSectionByIdAsync(menuSection.MenuSectionId);
-
-            if (menuSectionToUpdate == null)
-            {
-                return NotFound();
-            }
-            else if (!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var menuSectionToUpdate = await _menuSectionService.GetMenuSectionByIdAsync(id);
+            if (menuSectionToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            menuSection.MenuSectionId = id;
             await _menuSectionService.UpdateMenuSectionAsync(menuSection);
-            return Ok(await _menuSectionService.GetMenuSectionByIdAsync(menuSection.MenuSectionId));
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -73,8 +73,9 @@ namespace AbaceriaLolo.WebAPI.Controllers
             {
                 return NotFound();
             }
+
             await _menuSectionService.DeleteMenuSectionAsync(id);
-            return Ok(menuSectionToDelete);
+            return NoContent();
         }
     }
 }

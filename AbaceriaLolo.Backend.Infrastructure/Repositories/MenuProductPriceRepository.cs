@@ -18,12 +18,16 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task<IEnumerable<MenuProductPriceModel>> GetAllMenuProductPricesAsync()
         {
-            return await _context.MenuProductPrice.ToListAsync();
+            return await _context.MenuProductPrice
+                .Include(mpp => mpp.TypeOfServing) // Include related entities if needed
+                .ToListAsync();
         }
 
         public async Task<MenuProductPriceModel> GetMenuProductPriceByIdAsync(int id)
         {
-            return await _context.MenuProductPrice.FindAsync(id);
+            return await _context.MenuProductPrice
+                .Include(mpp => mpp.TypeOfServing) // Include related entities if needed
+                .FirstOrDefaultAsync(mpp => mpp.MenuProductPriceId == id);
         }
 
         public async Task<MenuProductPriceModel> CreateMenuProductPriceAsync(MenuProductPriceModel menuProductPrice)
@@ -35,17 +39,13 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task UpdateMenuProductPriceAsync(MenuProductPriceModel menuProductPrice)
         {
-            var existingEntity = await _context.MenuProductPrice.FindAsync(menuProductPrice.MenuProductPriceId);
-            if (existingEntity != null)
-            {
-                _context.Entry(existingEntity).CurrentValues.SetValues(menuProductPrice);
-                await _context.SaveChangesAsync();
-            }
+            _context.MenuProductPrice.Update(menuProductPrice);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteMenuProductPriceAsync(int id)
         {
-            var menuProductPrice = await GetMenuProductPriceByIdAsync(id);
+            var menuProductPrice = await _context.MenuProductPrice.FindAsync(id);
             if (menuProductPrice != null)
             {
                 _context.MenuProductPrice.Remove(menuProductPrice);

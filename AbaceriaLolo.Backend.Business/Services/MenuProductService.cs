@@ -1,55 +1,52 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Data.Models;
-using AbaceriaLolo.Backend.Infrastructure.Interfaces;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
-using AbaceriaLolo.Backend.Infrastructure.Repositories;
+using AutoMapper;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Business.Services
 {
     public class MenuProductService : IMenuProductService
     {
         private readonly IMenuProductRepository _menuProductRepository;
+        private readonly IMapper _mapper;
 
-        public MenuProductService(IMenuProductRepository menuProductRepository)
+        public MenuProductService(IMenuProductRepository menuProductRepository, IMapper mapper)
         {
             _menuProductRepository = menuProductRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<MenuProductModel>> GetAllMenuProductsAsync()
+        public async Task<IEnumerable<MenuProductDTO>> GetAllMenuProductsAsync()
         {
-            return await _menuProductRepository.GetAllMenuProductsAsync();
+            var menuProducts = await _menuProductRepository.GetAllMenuProductsAsync();
+            return _mapper.Map<IEnumerable<MenuProductDTO>>(menuProducts);
         }
 
-        public async Task<MenuProductModel> GetMenuProductByIdAsync(int id)
+        public async Task<MenuProductDTO> GetMenuProductByIdAsync(int id)
         {
-            return await _menuProductRepository.GetMenuProductByIdAsync(id);
+            var menuProduct = await _menuProductRepository.GetMenuProductByIdAsync(id);
+            return _mapper.Map<MenuProductDTO>(menuProduct);
         }
 
-        public async Task<MenuProductModel> CreateMenuProductAsync(MenuProductDTO menuProduct)
+        public async Task<MenuProductDTO> CreateMenuProductAsync(MenuProductDTO menuProduct)
         {
-
-            var menuProductModel = new MenuProductModel
-            {
-                MenuProductId = 0,
-                MenuProductName = menuProduct.MenuProductName,
-                MenuSectionId = menuProduct.MenuSectionId,
-                Order = menuProduct.Order
-
-            };
-
-            return await _menuProductRepository.CreateMenuProductAsync(menuProductModel);
+            var menuProductModel = _mapper.Map<MenuProductModel>(menuProduct);
+            var createdMenuProduct = await _menuProductRepository.CreateMenuProductAsync(menuProductModel);
+            return _mapper.Map<MenuProductDTO>(createdMenuProduct);
         }
 
-        public async Task UpdateMenuProductAsync(MenuProductModel menuProduct)
+        public async Task UpdateMenuProductAsync(MenuProductDTO menuProduct)
         {
-            await _menuProductRepository.UpdateMenuProductAsync(menuProduct);
+            var menuProductModel = _mapper.Map<MenuProductModel>(menuProduct);
+            await _menuProductRepository.UpdateMenuProductAsync(menuProductModel);
         }
 
         public async Task DeleteMenuProductAsync(int id)
         {
             await _menuProductRepository.DeleteMenuProductAsync(id);
         }
-
     }
 }

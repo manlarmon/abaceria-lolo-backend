@@ -1,6 +1,8 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
+using AutoMapper;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -9,30 +11,37 @@ namespace AbaceriaLolo.Backend.Business.Services
     public class AllergenMenuProductService : IAllergenMenuProductService
     {
         private readonly IAllergenMenuProductRepository _allergenMenuProductRepository;
+        private readonly IMapper _mapper;
 
-        public AllergenMenuProductService(IAllergenMenuProductRepository allergenMenuProductRepository)
+        public AllergenMenuProductService(IAllergenMenuProductRepository allergenMenuProductRepository, IMapper mapper)
         {
             _allergenMenuProductRepository = allergenMenuProductRepository;
+            _mapper = mapper;
         }
 
-        public async Task<IEnumerable<AllergenMenuProductModel>> GetAllAllergenMenuProductsAsync()
+        public async Task<IEnumerable<AllergenMenuProductDTO>> GetAllAllergenMenuProductsAsync()
         {
-            return await _allergenMenuProductRepository.GetAllAllergenMenuProductsAsync();
+            var allergenMenuProducts = await _allergenMenuProductRepository.GetAllAllergenMenuProductsAsync();
+            return _mapper.Map<IEnumerable<AllergenMenuProductDTO>>(allergenMenuProducts);
         }
 
-        public async Task<AllergenMenuProductModel> GetAllergenMenuProductByIdAsync(int id)
+        public async Task<AllergenMenuProductDTO> GetAllergenMenuProductByIdAsync(int id)
         {
-            return await _allergenMenuProductRepository.GetAllergenMenuProductByIdAsync(id);
+            var allergenMenuProduct = await _allergenMenuProductRepository.GetAllergenMenuProductByIdAsync(id);
+            return _mapper.Map<AllergenMenuProductDTO>(allergenMenuProduct);
         }
 
-        public async Task<AllergenMenuProductModel> CreateAllergenMenuProductAsync(AllergenMenuProductModel allergenMenuProduct)
+        public async Task<AllergenMenuProductDTO> CreateAllergenMenuProductAsync(AllergenMenuProductDTO allergenMenuProduct)
         {
-            return await _allergenMenuProductRepository.CreateAllergenMenuProductAsync(allergenMenuProduct);
+            var allergenMenuProductModel = _mapper.Map<AllergenMenuProductModel>(allergenMenuProduct);
+            var createdAllergenMenuProduct = await _allergenMenuProductRepository.CreateAllergenMenuProductAsync(allergenMenuProductModel);
+            return _mapper.Map<AllergenMenuProductDTO>(createdAllergenMenuProduct);
         }
 
-        public async Task UpdateAllergenMenuProductAsync(AllergenMenuProductModel allergenMenuProduct)
+        public async Task UpdateAllergenMenuProductAsync(AllergenMenuProductDTO allergenMenuProduct)
         {
-            await _allergenMenuProductRepository.UpdateAllergenMenuProductAsync(allergenMenuProduct);
+            var allergenMenuProductModel = _mapper.Map<AllergenMenuProductModel>(allergenMenuProduct);
+            await _allergenMenuProductRepository.UpdateAllergenMenuProductAsync(allergenMenuProductModel);
         }
 
         public async Task DeleteAllergenMenuProductAsync(int id)

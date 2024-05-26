@@ -18,12 +18,18 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task<IEnumerable<AllergenMenuProductModel>> GetAllAllergenMenuProductsAsync()
         {
-            return await _context.AllergenMenuProduct.ToListAsync();
+            return await _context.AllergenMenuProduct
+                .Include(amp => amp.Allergen) // Include related entities if needed
+                .Include(amp => amp.MenuProduct) // Include related entities if needed
+                .ToListAsync();
         }
 
         public async Task<AllergenMenuProductModel> GetAllergenMenuProductByIdAsync(int id)
         {
-            return await _context.AllergenMenuProduct.FindAsync(id);
+            return await _context.AllergenMenuProduct
+                .Include(amp => amp.Allergen) // Include related entities if needed
+                .Include(amp => amp.MenuProduct) // Include related entities if needed
+                .FirstOrDefaultAsync(amp => amp.AllergenMenuProductId == id);
         }
 
         public async Task<AllergenMenuProductModel> CreateAllergenMenuProductAsync(AllergenMenuProductModel allergenMenuProduct)
@@ -35,17 +41,13 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task UpdateAllergenMenuProductAsync(AllergenMenuProductModel allergenMenuProduct)
         {
-            var existingEntity = await _context.AllergenMenuProduct.FindAsync(allergenMenuProduct.AllergenMenuProductId);
-            if (existingEntity != null)
-            {
-                _context.Entry(existingEntity).CurrentValues.SetValues(allergenMenuProduct);
-                await _context.SaveChangesAsync();
-            }
+            _context.AllergenMenuProduct.Update(allergenMenuProduct);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAllergenMenuProductAsync(int id)
         {
-            var allergenMenuProduct = await GetAllergenMenuProductByIdAsync(id);
+            var allergenMenuProduct = await _context.AllergenMenuProduct.FindAsync(id);
             if (allergenMenuProduct != null)
             {
                 _context.AllergenMenuProduct.Remove(allergenMenuProduct);

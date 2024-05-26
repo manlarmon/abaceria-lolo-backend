@@ -9,7 +9,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
         Task<IEnumerable<TypeOfServingModel>> GetAllTypesOfServingAsync();
         Task<TypeOfServingModel> GetTypeOfServingByIdAsync(int id);
         Task<TypeOfServingModel> CreateTypeOfServingAsync(TypeOfServingModel typeOfServing);
-        Task UpdateTypeOfServingAsync(TypeOfServingModel typeOfServing);
+        Task<TypeOfServingModel> UpdateTypeOfServingAsync(TypeOfServingModel typeOfServing);
         Task DeleteTypeOfServingAsync(int id);
     }
 }

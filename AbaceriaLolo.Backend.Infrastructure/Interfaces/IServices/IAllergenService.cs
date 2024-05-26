@@ -1,14 +1,15 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
 {
     public interface IAllergenService
     {
-        Task<IEnumerable<AllergenModel>> GetAllAllergensAsync();
-        Task<AllergenModel> GetAllergenByIdAsync(int id);
-        Task<AllergenModel> CreateAllergenAsync(AllergenDTO allergen);
-        Task UpdateAllergenAsync(AllergenModel allergen);
+        Task<IEnumerable<AllergenDTO>> GetAllAllergensAsync();
+        Task<AllergenDTO> GetAllergenByIdAsync(int id);
+        Task<AllergenDTO> CreateAllergenAsync(AllergenDTO allergen);
+        Task UpdateAllergenAsync(AllergenDTO allergen);
         Task DeleteAllergenAsync(int id);
     }
 }

@@ -1,7 +1,8 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.WebAPI.Controllers
 {
@@ -42,42 +43,41 @@ namespace AbaceriaLolo.WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            await _allergenService.CreateAllergenAsync(allergen);
-
-            // Devuelve una respuesta HTTP 201 (Created) con la ubicación del recurso recién creado en el encabezado de la respuesta, y el objeto allergen como el cuerpo de la respuesta.
-            var allergens = await _allergenService.GetAllAllergensAsync();
-            var lastAllergen = allergens.Last();
-            return Ok(lastAllergen);
+            var createdAllergen = await _allergenService.CreateAllergenAsync(allergen);
+            return CreatedAtAction(nameof(GetAllergenById), new { id = createdAllergen.AllergenId }, createdAllergen);
         }
 
-        [HttpPut]
-        public async Task<IActionResult> UpdateAllergenAsync(AllergenModel allergen)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateAllergen(int id, [FromBody] AllergenDTO allergen)
         {
-            var allergenToUpdate = await _allergenService.GetAllergenByIdAsync(allergen.AllergenId);
-
-            if (allergenToUpdate == null)
-            {
-                return NotFound();
-            }
-            else if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
+            var existingAllergen = await _allergenService.GetAllergenByIdAsync(id);
+            if (existingAllergen == null)
+            {
+                return NotFound();
+            }
+
+            allergen.AllergenId = id;
             await _allergenService.UpdateAllergenAsync(allergen);
-            return Ok(await _allergenService.GetAllergenByIdAsync(allergen.AllergenId));
+
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAllergen(int id)
         {
-            var allergenToDelete = await _allergenService.GetAllergenByIdAsync(id);
-            if (allergenToDelete == null)
+            var existingAllergen = await _allergenService.GetAllergenByIdAsync(id);
+            if (existingAllergen == null)
             {
                 return NotFound();
             }
+
             await _allergenService.DeleteAllergenAsync(id);
-            return Ok(allergenToDelete);
+            return NoContent();
         }
     }
 }

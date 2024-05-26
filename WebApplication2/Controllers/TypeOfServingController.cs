@@ -1,11 +1,10 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
-using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AbaceriaLolo.Backend.WebAPI.Controllers
+namespace AbaceriaLolo.WebAPI.Controllers
 {
     [ApiController]
     [Route("TypeOfServing")]
@@ -49,15 +48,15 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateTypeOfServing(int id, [FromBody] TypeOfServingModel typeOfServing)
+        public async Task<IActionResult> UpdateTypeOfServing(int id, [FromBody] TypeOfServingDTO typeOfServing)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var typeOfServingToUpdate = await _typeOfServingService.GetTypeOfServingByIdAsync(id);
-            if (typeOfServingToUpdate == null)
+            var existingTypeOfServing = await _typeOfServingService.GetTypeOfServingByIdAsync(id);
+            if (existingTypeOfServing == null)
             {
                 return NotFound();
             }
@@ -71,8 +70,8 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteTypeOfServing(int id)
         {
-            var typeOfServingToDelete = await _typeOfServingService.GetTypeOfServingByIdAsync(id);
-            if (typeOfServingToDelete == null)
+            var existingTypeOfServing = await _typeOfServingService.GetTypeOfServingByIdAsync(id);
+            if (existingTypeOfServing == null)
             {
                 return NotFound();
             }

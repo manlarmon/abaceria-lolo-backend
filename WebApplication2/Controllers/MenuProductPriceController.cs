@@ -1,10 +1,10 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace AbaceriaLolo.Backend.WebAPI.Controllers
+namespace AbaceriaLolo.WebAPI.Controllers
 {
     [ApiController]
     [Route("MenuProductPrice")]
@@ -36,7 +36,7 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateMenuProductPrice([FromBody] MenuProductPriceModel menuProductPrice)
+        public async Task<IActionResult> CreateMenuProductPrice([FromBody] MenuProductPriceDTO menuProductPrice)
         {
             if (!ModelState.IsValid)
             {
@@ -48,15 +48,15 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateMenuProductPrice(int id, [FromBody] MenuProductPriceModel menuProductPrice)
+        public async Task<IActionResult> UpdateMenuProductPrice(int id, [FromBody] MenuProductPriceDTO menuProductPrice)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            var menuProductPriceToUpdate = await _menuProductPriceService.GetMenuProductPriceByIdAsync(id);
-            if (menuProductPriceToUpdate == null)
+            var existingMenuProductPrice = await _menuProductPriceService.GetMenuProductPriceByIdAsync(id);
+            if (existingMenuProductPrice == null)
             {
                 return NotFound();
             }
@@ -70,8 +70,8 @@ namespace AbaceriaLolo.Backend.WebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteMenuProductPrice(int id)
         {
-            var menuProductPriceToDelete = await _menuProductPriceService.GetMenuProductPriceByIdAsync(id);
-            if (menuProductPriceToDelete == null)
+            var existingMenuProductPrice = await _menuProductPriceService.GetMenuProductPriceByIdAsync(id);
+            if (existingMenuProductPrice == null)
             {
                 return NotFound();
             }

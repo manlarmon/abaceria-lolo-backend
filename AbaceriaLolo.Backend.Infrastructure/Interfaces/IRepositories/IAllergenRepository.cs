@@ -1,4 +1,6 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.Models;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
 {
@@ -7,8 +9,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
         Task<IEnumerable<AllergenModel>> GetAllAllergensAsync();
         Task<AllergenModel> GetAllergenByIdAsync(int id);
         Task<AllergenModel> CreateAllergenAsync(AllergenModel allergen);
-        Task UpdateAllergenAsync(AllergenModel allergen);
+        Task<AllergenModel> UpdateAllergenAsync(AllergenModel allergen);
         Task DeleteAllergenAsync(int id);
-
     }
 }
