@@ -2,6 +2,7 @@
 using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using Microsoft.EntityFrameworkCore;
 using AbaceriaLolo.Backend.Infrastructure.Data.Mappings.Mappers;
+    
 
 namespace AbaceriaLolo.Backend.Infrastructure.Data
 {
@@ -39,8 +40,11 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new TypeOfServingMapper());
             modelBuilder.ApplyConfiguration(new AllergenMenuProductMapper());
             modelBuilder.ApplyConfiguration(new MenuProductPriceMapper());
+            modelBuilder.ApplyConfiguration(new UserMapper()); 
+
         }
 
+        public DbSet<UserModel> User { get; set; }
         public DbSet<AllergenModel> Allergen { get; set; }
         public DbSet<MenuProductModel> MenuProduct { get; set; }
         public DbSet<MenuSectionModel> MenuSection { get; set; }

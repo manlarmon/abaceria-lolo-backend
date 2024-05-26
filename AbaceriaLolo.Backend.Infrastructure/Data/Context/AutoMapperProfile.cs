@@ -2,11 +2,15 @@
 using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 
-namespace AbaceriaLolo.Backend.Business.Mapping;
+namespace AbaceriaLolo.Backend.Infrastructure.Data.Context;
 public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
+        // User Mapping
+        CreateMap<UserModel, UserDTO>()
+            .ReverseMap();
+
         // Allergen Mapping
         CreateMap<AllergenModel, AllergenDTO>().ReverseMap();
 

@@ -1,6 +1,5 @@
 using AbaceriaLolo.Backend.Business.Services;
 using AbaceriaLolo.Backend.Infrastructure.Data;
-using AbaceriaLolo.Backend.Business.Mapping;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using AbaceriaLolo.Backend.Infrastructure.Repositories;
@@ -8,8 +7,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
+using AbaceriaLolo.Backend.Infrastructure.Data.Context;
 
- 
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,6 +56,7 @@ builder.Services.AddControllers()
 
 
 // Repositories
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IAllergenRepository, AllergenRepository>();
 builder.Services.AddScoped<IMenuProductRepository, MenuProductRepository>();
 builder.Services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
@@ -64,6 +65,7 @@ builder.Services.AddScoped<IAllergenMenuProductRepository, AllergenMenuProductRe
 builder.Services.AddScoped<IMenuProductPriceRepository, MenuProductPriceRepository>();
 
 // Services
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IAllergenService, AllergenService>();
 builder.Services.AddScoped<IMenuProductService, MenuProductService>();
 builder.Services.AddScoped<IMenuSectionService, MenuSectionService>();
