@@ -14,7 +14,8 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data.Mappings.Mappers
             builder.Property(ms => ms.MenuSectionId).HasColumnName("MenuSectionId");
 
             builder.Property(ms => ms.Order)
-                .IsRequired().HasColumnName("Order");
+                .IsRequired().HasColumnName("Order")
+                .HasDefaultValue(0);
 
             builder.Property(mp => mp.IsVisible)
                 .IsRequired()

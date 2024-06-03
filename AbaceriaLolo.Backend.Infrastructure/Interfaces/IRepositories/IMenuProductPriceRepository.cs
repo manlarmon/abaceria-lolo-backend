@@ -11,5 +11,8 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories
         Task<MenuProductPriceModel> CreateMenuProductPriceAsync(MenuProductPriceModel menuProductPrice);
         Task UpdateMenuProductPriceAsync(MenuProductPriceModel menuProductPrice);
         Task DeleteMenuProductPriceAsync(int id);
+
+        // Método para actualizar múltiples precios
+        Task UpdateMenuProductPricesAsync(IEnumerable<MenuProductPriceModel> menuProductPrices);
     }
 }

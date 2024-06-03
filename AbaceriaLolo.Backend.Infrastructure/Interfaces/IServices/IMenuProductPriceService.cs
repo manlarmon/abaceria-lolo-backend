@@ -11,5 +11,6 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
         Task<MenuProductPriceDTO> CreateMenuProductPriceAsync(MenuProductPriceDTO menuProductPrice);
         Task UpdateMenuProductPriceAsync(MenuProductPriceDTO menuProductPrice);
         Task DeleteMenuProductPriceAsync(int id);
+        Task AdjustPricesForSectionAsync(int sectionId, decimal adjustment); // Añadido
     }
 }

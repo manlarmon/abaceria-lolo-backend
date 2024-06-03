@@ -10,10 +10,12 @@ namespace AbaceriaLolo.WebAPI.Controllers
     public class MenuSectionController : ControllerBase
     {
         private readonly IMenuSectionService _menuSectionService;
+        private readonly IMenuProductPriceService _menuProductPriceService; // Añadido
 
-        public MenuSectionController(IMenuSectionService menuSectionService)
+        public MenuSectionController(IMenuSectionService menuSectionService, IMenuProductPriceService menuProductPriceService)
         {
             _menuSectionService = menuSectionService;
+            _menuProductPriceService = menuProductPriceService; // Añadido
         }
 
         [HttpGet]
@@ -76,6 +78,21 @@ namespace AbaceriaLolo.WebAPI.Controllers
 
             await _menuSectionService.DeleteMenuSectionAsync(id);
             return NoContent();
+        }
+
+        // Nuevo endpoint para ajuste de precios
+        [HttpPost("{id}/adjust-prices")]
+        public async Task<IActionResult> AdjustPricesForSection(int id, [FromBody] decimal adjustment)
+        {
+            try
+            {
+                await _menuProductPriceService.AdjustPricesForSectionAsync(id, adjustment);
+                return Ok();
+            }
+            catch
+            {
+                return StatusCode(500, "Error adjusting prices for section");
+            }
         }
     }
 }

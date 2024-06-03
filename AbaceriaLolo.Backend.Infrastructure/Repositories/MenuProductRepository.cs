@@ -3,6 +3,7 @@ using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 public class MenuProductRepository : IMenuProductRepository
@@ -21,6 +22,7 @@ public class MenuProductRepository : IMenuProductRepository
             .ThenInclude(mpp => mpp.TypeOfServing)
             .Include(mp => mp.AllergenMenuProduct)
             .ThenInclude(amp => amp.Allergen)
+            .OrderBy(mp => mp.Order) // Ordenar por la propiedad Order
             .ToListAsync();
     }
 

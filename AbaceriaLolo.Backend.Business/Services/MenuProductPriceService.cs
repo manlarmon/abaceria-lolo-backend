@@ -1,9 +1,12 @@
-﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+﻿using AbaceriaLolo.Backend.Infrastructure.Data;
+using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace AbaceriaLolo.Backend.Business.Services
@@ -12,11 +15,13 @@ namespace AbaceriaLolo.Backend.Business.Services
     {
         private readonly IMenuProductPriceRepository _menuProductPriceRepository;
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public MenuProductPriceService(IMenuProductPriceRepository menuProductPriceRepository, IMapper mapper)
+        public MenuProductPriceService(IMenuProductPriceRepository menuProductPriceRepository, IMapper mapper, DataContext context)
         {
             _menuProductPriceRepository = menuProductPriceRepository;
             _mapper = mapper;
+            _context = context;
         }
 
         public async Task<IEnumerable<MenuProductPriceDTO>> GetAllMenuProductPricesAsync()
@@ -47,6 +52,37 @@ namespace AbaceriaLolo.Backend.Business.Services
         public async Task DeleteMenuProductPriceAsync(int id)
         {
             await _menuProductPriceRepository.DeleteMenuProductPriceAsync(id);
+        }
+
+        public async Task AdjustPricesForSectionAsync(int sectionId, decimal adjustment)
+        {
+            using (var transaction = await _context.Database.BeginTransactionAsync())
+            {
+                try
+                {
+                    var products = await _context.MenuProduct
+                        .Where(mp => mp.MenuSectionId == sectionId)
+                        .Include(mp => mp.MenuProductPrice)
+                        .ToListAsync();
+
+                    foreach (var product in products)
+                    {
+                        foreach (var price in product.MenuProductPrice)
+                        {
+                            price.Price += adjustment;
+                            _context.MenuProductPrice.Update(price);
+                        }
+                    }
+
+                    await _context.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                }
+                catch
+                {
+                    await transaction.RollbackAsync();
+                    throw;
+                }
+            }
         }
     }
 }
