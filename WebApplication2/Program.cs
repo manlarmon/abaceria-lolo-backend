@@ -30,13 +30,13 @@ var builder = WebApplication.CreateBuilder(args);
 //    //        .AllowCredentials()
 //    //        .AllowAnyHeader());
 //});
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.WithOrigins("http://localhost:4200", "https://abaceria-lolo.web.app")
                .AllowAnyMethod()
+               .AllowCredentials()
                .AllowAnyHeader();
     });
 });
