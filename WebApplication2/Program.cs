@@ -15,31 +15,32 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-// Add services to the container.
-//builder.Services.AddCors(options =>
-//{
-//    options.AddPolicy("AllowSpecificOrigin",
-//        builder => builder.WithOrigins("http://localhost:4200")
-//            .AllowAnyMethod()
-//            .AllowCredentials()
-//            .AllowAnyHeader());
-
-//    //options.AddPolicy("AllowSpecificDeployOrigin",
-//    //    builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
-//    //        .AllowAnyMethod()
-//    //        .AllowCredentials()
-//    //        .AllowAnyHeader());
-//});
+//Add services to the container.
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("CorsPolicy", builder =>
-    {
-        builder.WithOrigins("http://localhost:4200", "https://abaceria-lolo.web.app", "https://abaceria-lolo-backend-c1256133d881.herokuapp.com")
-               .AllowAnyMethod()
-               .AllowCredentials()
-               .AllowAnyHeader();
-    });
+    //options.AddPolicy("AllowSpecificOrigin",
+    //   builder => builder.WithOrigins("http://localhost:4200")
+    //        .AllowAnyMethod()
+    //        .AllowCredentials()
+    //        .AllowAnyHeader());
+
+    options.AddPolicy("AllowSpecificDeployOrigin",
+        builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
+            .AllowAnyMethod()
+            .AllowCredentials()
+            .AllowAnyHeader());
 });
+
+//builder.Services.AddCors(options =>
+//{
+//    options.AddPolicy("CorsPolicy", builder =>
+//    {
+//        builder.WithOrigins("http://localhost:4200", "https://abaceria-lolo.web.app", "https://abaceria-lolo-backend-c1256133d881.herokuapp.com")
+//               .AllowAnyMethod()
+//               .AllowCredentials()
+//               .AllowAnyHeader();
+//    });
+//});
 
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
@@ -119,7 +120,7 @@ else
 }
 
 app.UseHttpsRedirection();
-app.UseCors("CorsPolicy"); // Usar la política CORS definida
+app.UseCors("AllowSpecificDeployOrigin"); // Usar la política CORS definida
 app.UseRouting();
 app.UseAuthorization();
 app.MapControllers();

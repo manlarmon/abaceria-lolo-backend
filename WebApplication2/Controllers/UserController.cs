@@ -27,6 +27,7 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<UserDTO>> GetUserById(int id)
         {
+            Console.WriteLine("Obteniendo Usuario by id " + id);
             var user = await _userService.GetUserByIdAsync(id);
             if (user == null)
             {
