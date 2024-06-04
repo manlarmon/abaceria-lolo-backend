@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy", builder =>
     {
-        builder.WithOrigins("http://localhost:4200", "https://abaceria-lolo.web.app")
+        builder.WithOrigins("http://localhost:4200", "https://abaceria-lolo.web.app", "https://abaceria-lolo-backend-c1256133d881.herokuapp.com")
                .AllowAnyMethod()
                .AllowCredentials()
                .AllowAnyHeader();
