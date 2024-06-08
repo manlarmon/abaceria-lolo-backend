@@ -21,9 +21,9 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
             return await _context.User.ToListAsync();
         }
 
-        public async Task<UserModel> GetUserByIdAsync(int userId)
+        public async Task<UserModel> GetUserByIdAsync(int id)
         {
-            return await _context.User.FindAsync(userId);
+            return await _context.User.AsNoTracking().FirstOrDefaultAsync(u => u.UserId == id);
         }
 
         public async Task<UserModel> GetUserByEmailAsync(string email)
@@ -39,8 +39,16 @@ namespace AbaceriaLolo.Backend.Infrastructure.Repositories
 
         public async Task UpdateUserAsync(UserModel user)
         {
-            _context.User.Update(user);
-            await _context.SaveChangesAsync();
+            var existingUser = await _context.User.FindAsync(user.UserId);
+            if (existingUser != null)
+            {
+                _context.Entry(existingUser).CurrentValues.SetValues(user);
+                await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("User not found");
+            }
         }
 
         public async Task DeleteUserAsync(int userId)

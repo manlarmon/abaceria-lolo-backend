@@ -2,6 +2,7 @@
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using System.Threading.Tasks;
 using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AbaceriaLolo.WebAPI.Controllers
 {
@@ -37,6 +38,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateMenuSection([FromBody] MenuSectionDTO menuSection)
         {
             if (!ModelState.IsValid)
@@ -49,6 +51,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateMenuSection(int id, [FromBody] MenuSectionDTO menuSection)
         {
             if (!ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteMenuSection(int id)
         {
             var menuSectionToDelete = await _menuSectionService.GetMenuSectionByIdAsync(id);
@@ -82,6 +86,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
 
         // Nuevo endpoint para ajuste de precios
         [HttpPost("{id}/adjust-prices")]
+        [Authorize]
         public async Task<IActionResult> AdjustPricesForSection(int id, [FromBody] decimal adjustment)
         {
             try

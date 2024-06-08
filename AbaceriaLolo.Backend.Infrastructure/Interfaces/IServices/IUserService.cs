@@ -12,5 +12,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices
         Task CreateUserAsync(UserDTO user);
         Task UpdateUserAsync(UserDTO user);
         Task DeleteUserAsync(int userId);
+        Task<bool> IsUserEnabledAsync(string userEmail);
+
     }
 }
