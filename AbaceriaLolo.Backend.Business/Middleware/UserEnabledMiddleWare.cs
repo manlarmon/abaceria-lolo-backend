@@ -18,10 +18,12 @@ public class UserEnabledMiddleware
     public async Task InvokeAsync(HttpContext context, IUserService userService)
     {
 
-        // Lo uso para ver los claim que tiene el usuario autenticado 
         // Un claim es un par clave-valor que representa un atributo del usuario
         // El httpContext es un objeto que encapsula toda la información específica de una solicitud HTTP.
         // Los claim vienen del token que se genera al autenticar el usuario.
+
+
+        // Lo uso para ver los claim que tiene el usuario autenticado 
 
         //if (context.User.Identity.IsAuthenticated)
         //{

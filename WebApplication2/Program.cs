@@ -13,6 +13,7 @@ using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using AbaceriaLolo.Backend.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -61,6 +62,7 @@ builder.Services.AddScoped<IAllergenMenuProductService, AllergenMenuProductServi
 builder.Services.AddScoped<IMenuProductPriceService, MenuProductPriceService>();
 builder.Services.AddScoped<IInventorySectionService, InventorySectionService>();
 builder.Services.AddScoped<IInventoryProductService, InventoryProductService>();
+builder.Services.AddScoped<IPdfService, PdfService>();
 
 // Add DbContext
 // Se agrega el contexto de la base de datos a la aplicación.
