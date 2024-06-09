@@ -40,8 +40,9 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data
             modelBuilder.ApplyConfiguration(new TypeOfServingMapper());
             modelBuilder.ApplyConfiguration(new AllergenMenuProductMapper());
             modelBuilder.ApplyConfiguration(new MenuProductPriceMapper());
-            modelBuilder.ApplyConfiguration(new UserMapper()); 
-
+            modelBuilder.ApplyConfiguration(new UserMapper());
+            modelBuilder.ApplyConfiguration(new InventorySectionMapper());
+            modelBuilder.ApplyConfiguration(new InventoryProductMapper());
         }
 
         public DbSet<UserModel> User { get; set; }
@@ -51,5 +52,7 @@ namespace AbaceriaLolo.Backend.Infrastructure.Data
         public DbSet<TypeOfServingModel> TypeOfServing { get; set; }
         public DbSet<AllergenMenuProductModel> AllergenMenuProduct { get; set; }
         public DbSet<MenuProductPriceModel> MenuProductPrice { get; set; }
+        public DbSet<InventorySectionModel> InventorySection { get; set; }
+        public DbSet<InventoryProductModel> InventoryProduct { get; set; }
     }
 }

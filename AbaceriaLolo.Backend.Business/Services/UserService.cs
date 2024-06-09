@@ -3,6 +3,7 @@ using AbaceriaLolo.Backend.Infrastructure.Data.Models;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IRepositories;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -52,6 +53,14 @@ namespace AbaceriaLolo.Backend.Business.Services
         public async Task DeleteUserAsync(int userId)
         {
             await _userRepository.DeleteUserAsync(userId);
+        }
+
+        public async Task<bool> IsUserEnabledAsync(string userEmail)
+        {
+            var users = await _userRepository.GetAllUsersAsync();
+            var user = users.FirstOrDefault(u => u.Email == userEmail);
+
+            return user?.Enabled ?? false;
         }
     }
 }

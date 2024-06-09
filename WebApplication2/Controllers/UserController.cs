@@ -3,6 +3,7 @@ using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AbaceriaLolo.Backend.WebApi.Controllers
 {
@@ -48,6 +49,7 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<ActionResult> CreateUser([FromBody] UserDTO user)
         {
             await _userService.CreateUserAsync(user);
@@ -55,8 +57,12 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateUser(int id, [FromBody] UserDTO user)
         {
+
+            var userModel = user;
+
             if (id != user.UserId)
             {
                 return BadRequest();
@@ -66,6 +72,7 @@ namespace AbaceriaLolo.Backend.WebApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteUser(int id)
         {
             await _userService.DeleteUserAsync(id);

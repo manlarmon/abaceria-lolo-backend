@@ -37,5 +37,13 @@ public class AutoMapperProfile : Profile
 
         // TypeOfServing Mapping
         CreateMap<TypeOfServingModel, TypeOfServingDTO>().ReverseMap();
+        
+        // InventorySection Mapping
+        CreateMap<InventorySectionModel, InventorySectionDTO>().ReverseMap();
+        
+        // InventoryProduct Mapping
+        CreateMap<InventoryProductModel, InventoryProductDTO>().ReverseMap();
+
+
     }
 }

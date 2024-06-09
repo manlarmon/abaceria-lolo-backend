@@ -2,6 +2,7 @@
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
 using System.Threading.Tasks;
 using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AbaceriaLolo.WebAPI.Controllers
 {
@@ -35,6 +36,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateMenuProduct([FromBody] MenuProductDTO menuProduct)
         {
             if (!ModelState.IsValid)
@@ -47,6 +49,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateMenuProduct(int id, [FromBody] MenuProductDTO menuProduct)
         {
             if (!ModelState.IsValid)
@@ -66,6 +69,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteMenuProduct(int id)
         {
             var menuProductToDelete = await _menuProductService.GetMenuProductByIdAsync(id);

@@ -8,28 +8,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text.Json.Serialization;
 using AbaceriaLolo.Backend.Infrastructure.Data.Context;
-
-
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using AbaceriaLolo.Backend.Infrastructure.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-//Add services to the container.
-//builder.Services.AddCors(options =>
-//{
-//    //options.AddPolicy("AllowSpecificOrigin",
-//    //   builder => builder.WithOrigins("http://localhost:4200")
-//    //        .AllowAnyMethod()
-//    //        .AllowCredentials()
-//    //        .AllowAnyHeader());
-
-//    options.AddPolicy("AllowSpecificDeployOrigin",
-//        builder => builder.WithOrigins("https://abaceria-lolo.web.app/")
-//            .AllowAnyMethod()
-//            .AllowCredentials()
-//            .AllowAnyHeader());
-//});
 
 builder.Services.AddCors(options =>
 {
@@ -49,12 +35,12 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
     });
 
+builder.Services.AddEndpointsApiExplorer();
 
 // SCOPES
 // Los scopes son una forma de limitar la duración de un objeto que se crea en el contenedor de dependencias. 
 // Cuando se crea un objeto en un scope, solo está disponible en ese scope y en los scopes secundarios.
 // AddScoped: Crea un nuevo objeto para cada solicitud HTTP.
-
 
 // Repositories
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -64,6 +50,8 @@ builder.Services.AddScoped<IMenuSectionRepository, MenuSectionRepository>();
 builder.Services.AddScoped<ITypeOfServingRepository, TypeOfServingRepository>();
 builder.Services.AddScoped<IAllergenMenuProductRepository, AllergenMenuProductRepository>();
 builder.Services.AddScoped<IMenuProductPriceRepository, MenuProductPriceRepository>();
+builder.Services.AddScoped<IInventorySectionRepository, InventorySectionRepository>();
+builder.Services.AddScoped<IInventoryProductRepository, InventoryProductRepository>();
 
 // Services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -73,6 +61,9 @@ builder.Services.AddScoped<IMenuSectionService, MenuSectionService>();
 builder.Services.AddScoped<ITypeOfServingService, TypeOfServingService>();
 builder.Services.AddScoped<IAllergenMenuProductService, AllergenMenuProductService>();
 builder.Services.AddScoped<IMenuProductPriceService, MenuProductPriceService>();
+builder.Services.AddScoped<IInventorySectionService, InventorySectionService>();
+builder.Services.AddScoped<IInventoryProductService, InventoryProductService>();
+builder.Services.AddScoped<IPdfService, PdfService>();
 
 // Add DbContext
 // Se agrega el contexto de la base de datos a la aplicación.
@@ -92,11 +83,29 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Configurar Firebase
+FirebaseApp.Create(new AppOptions
+{
+    Credential = GoogleCredential.FromFile("AppData/abaceria-lolo-firebase-adminsdk-z0we3-36d7780640.json") // Cambia la ruta al archivo JSON descargado
+});
+
+// Configurar autenticación JWT
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.Authority = "https://securetoken.google.com/abaceria-lolo";
+        options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidIssuer = "https://securetoken.google.com/abaceria-lolo",
+            ValidateAudience = true,
+            ValidAudience = "abaceria-lolo",
+            ValidateLifetime = true
+        };
+    });
 
 // Register AutoMapper
 builder.Services.AddAutoMapper(typeof(AutoMapperProfile).Assembly);
-
-
 
 var app = builder.Build();
 
@@ -122,6 +131,8 @@ else
 app.UseHttpsRedirection();
 app.UseCors("CorsPolicy"); // Usar la política CORS definida
 app.UseRouting();
+app.UseAuthentication();    
 app.UseAuthorization();
+app.UseMiddleware<UserEnabledMiddleware>(); // Se añade el middleware de verificación de usuario habilitado en la aplicación
 app.MapControllers();
 app.Run();

@@ -1,5 +1,6 @@
 ﻿using AbaceriaLolo.Backend.Infrastructure.Data.DTOs;
 using AbaceriaLolo.Backend.Infrastructure.Interfaces.IServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -36,6 +37,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateTypeOfServing([FromBody] TypeOfServingDTO typeOfServing)
         {
             if (!ModelState.IsValid)
@@ -48,6 +50,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize]
         public async Task<IActionResult> UpdateTypeOfServing(int id, [FromBody] TypeOfServingDTO typeOfServing)
         {
             if (!ModelState.IsValid)
@@ -68,6 +71,7 @@ namespace AbaceriaLolo.WebAPI.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteTypeOfServing(int id)
         {
             var existingTypeOfServing = await _typeOfServingService.GetTypeOfServingByIdAsync(id);
